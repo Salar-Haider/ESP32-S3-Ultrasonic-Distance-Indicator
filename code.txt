@@ -1,0 +1,60 @@
+#include <Wire.h>
+#include <Arduino.h>
+
+#define echoPin 5     // Echo pin (same as your original)
+#define trigPin 6     // Trigger pin (same as your original)
+
+// LED pins
+#define LED1 15
+#define LED2 16
+#define LED3 17
+#define LED4 18
+
+long duration, distance;
+
+void setup() {
+  Serial.begin(9600);        // same baud as your original sketch
+  delay(1000);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
+  pinMode(LED4, OUTPUT);
+
+  // Ensure LEDs are off initially
+  digitalWrite(LED1, LOW);
+  digitalWrite(LED2, LOW);
+  digitalWrite(LED3, LOW);
+  digitalWrite(LED4, LOW);
+}
+
+void loop() {
+  // Trigger pulse (exact timing as your original)
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read echo (blocking, same as your original)
+  duration = pulseIn(echoPin, HIGH);
+
+  // Convert to centimeters using the same formula you used before
+  distance = duration / 58.2;
+
+  // Print exactly like your original
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  // LED logic based on thresholds
+  digitalWrite(LED1, (distance < 40) ? HIGH : LOW);
+  digitalWrite(LED2, (distance < 30) ? HIGH : LOW);
+  digitalWrite(LED3, (distance < 20) ? HIGH : LOW);
+  digitalWrite(LED4, (distance < 10) ? HIGH : LOW);
+
+  delay(1000); // same pacing as your original code
+}
